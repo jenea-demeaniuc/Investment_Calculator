@@ -1,0 +1,125 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.lang import Builder
+
+
+class InvestmentCalculatorApp(App):
+
+    def build(self):
+        self.layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
+
+        # Initial Investment
+        self.layout.add_widget(Label(text="Initial Investment:"))
+        self.initial_investment = TextInput(hint_text="Enter initial investment", multiline=False)
+        self.layout.add_widget(self.initial_investment)
+
+        # Annual Interest Rate
+        self.layout.add_widget(Label(text="Annual Interest Rate (in %):"))
+        self.annual_rate = TextInput(hint_text="Enter annual interest rate", multiline=False)
+        self.layout.add_widget(self.annual_rate)
+
+        # Years
+        self.layout.add_widget(Label(text="Number of Years:"))
+        self.years = TextInput(hint_text="Enter number of years", multiline=False)
+        self.layout.add_widget(self.years)
+
+        # Calculate Button
+        self.calculate_button = Button(text="Calculate")
+        self.calculate_button.bind(on_press=self.calculate)
+        self.layout.add_widget(self.calculate_button)
+
+        # Result Label
+        self.result_label = Label(text="Future Value: $0.00")
+        self.layout.add_widget(self.result_label)
+
+        return self.layout
+
+    def calculate(self, instance):
+        try:
+            # Get the values from the inputs
+            initial_investment = float(self.initial_investment.text)
+            annual_rate = float(self.annual_rate.text) / 100
+            years = int(self.years.text)
+
+            # Calculate future value using compound interest formula
+            future_value = initial_investment * (1 + annual_rate) ** years
+
+            # Display the result
+            self.result_label.text = f"Future Value: ${future_value:,.2f}"
+
+        except ValueError:
+            # Handle invalid input
+            self.result_label.text = "Invalid input. Please enter valid numbers."
+
+
+if __name__ == "__main__":
+    InvestmentCalculatorApp().run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<InvestmentCalculatorApp>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10
+        spacing: 10
+
+        Label:
+            text: "Initial Investment:"
+
+        TextInput:
+            id: initial_investment
+            hint_text: "Enter initial investment"
+            multiline: False
+
+        Label:
+            text: "Annual Interest Rate (in %):"
+
+        TextInput:
+            id: annual_rate
+            hint_text: "Enter annual interest rate"
+            multiline: False
+
+        Label:
+            text: "Number of Years:"
+
+        TextInput:
+            id: years
+            hint_text: "Enter number of years"
+            multiline: False
+
+        Button:
+            text: "Calculate"
+            on_press: app.calculate()
+
+        Label:
+            id: result_label
+            text: "Future Value: $0.00"
